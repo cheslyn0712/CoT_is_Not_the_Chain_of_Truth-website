@@ -48,7 +48,7 @@
     "demo": null,
     "dataset": null
   },
-  "bibtex": "@misc{tong2026cotchaintruthempirical,\n      title={CoT is Not the Chain of Truth: An Empirical Internal Analysis of Reasoning LLMs for Fake News Generation}, \n      author={Zhao Tong and Chunlin Gong and Yiping Zhang and Haichao Shi and Qiang Liu and Xingcheng Xu and Shu Wu and Xiao-Yu Zhang},\n      year={2026},\n      eprint={2602.04856},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2602.04856}, \n}",
+  "bibtex": "@misc{tong2026cotchaintruthempirical,\n      title={CoT is Not the Chain of Truth: An Empirical Internal Analysis of Reasoning LLMs for Fake News Generation}, \n      author={Zhao Tong and Chunlin Gong and Yiping Zhang and Haichao Shi and Qiang Liu and Xingcheng Xu and Shu Wu and Xiao-Yu Zhang},\n      year={2026},\n      eprint={2602.04856},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2602.04856}, \n},",
   "methodOverview": "We build a coarse-to-fine pipeline: (1) generate and annotate CoT traces under direct/indirect fake-news prompts; (2) localize safety-critical mid-depth layers; (3) attribute divergence to attention heads using Jacobian-based stability (B1), geometry (B2), and energy (B3) metrics; (4) validate with perturbation analysis and critical-head mitigation.",
   "contributions": [
     "We show ~80% of CoT traces in fake-news generation are Unsafe or Potential Unsafe even when models refuse at the output layer.",

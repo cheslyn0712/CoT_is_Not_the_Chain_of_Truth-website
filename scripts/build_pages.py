@@ -493,7 +493,7 @@ def build() -> None:
 
         page_html = render_paper_page(data)
         (out_dir / "index.html").write_text(page_html, encoding="utf-8")
-        (out_dir / "paper.bib").write_text(data["bibtex"].strip() + "\n", encoding="utf-8")
+        (out_dir / "paper.bib").write_text(data["bibtex"], encoding="utf-8")
         papers.append(data)
         print(f"Built {out_dir / 'index.html'}")
 
