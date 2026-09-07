@@ -74,17 +74,17 @@ html {
 .paper-hero {
   width: 100%;
   text-align: center;
-  padding: 0.5rem 0 1.75rem;
-  margin-bottom: 2rem;
+  padding: 0.25rem 0 1.25rem;
+  margin-bottom: 1.5rem;
   border-bottom: 1px solid var(--line);
 }
 
 .venue-badge {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  margin: 0;
-  padding: 0.45rem 1rem 0.45rem 0.75rem;
+  gap: 8px;
+  margin: 0 0 0.5rem;
+  padding: 0.3rem 0.85rem 0.3rem 0.65rem;
   border-radius: 999px;
   background: rgba(78, 166, 238, 0.14);
   border: 1px solid rgba(78, 166, 238, 0.35);
@@ -102,20 +102,18 @@ html {
 
 .venue-logo-official {
   display: block;
-  height: 30px;
+  height: 26px;
   width: auto;
-  border-radius: 6px;
 }
 
 .hub-logo-official {
   display: block;
-  height: 26px;
+  height: 24px;
   width: auto;
-  border-radius: 6px;
 }
 
 .venue-year {
-  font-size: 1rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: var(--accent-2);
   letter-spacing: 0.04em;
@@ -128,9 +126,9 @@ a.venue-badge:hover {
 }
 
 .paper-hero h1 {
-  margin: 1rem 0 0.75rem;
+  margin: 0.65rem 0 0.5rem;
   font-family: var(--serif);
-  font-size: clamp(1.9rem, 3.4vw, 2.55rem);
+  font-size: clamp(1.75rem, 3vw, 2.35rem);
   line-height: 1.2;
   color: #102033;
 }
@@ -143,9 +141,9 @@ a.venue-badge:hover {
 }
 
 .paper-authors {
-  margin: 0 0 1rem;
-  font-size: 1.02rem;
-  line-height: 1.85;
+  margin: 0 0 0.65rem;
+  font-size: 0.98rem;
+  line-height: 1.65;
   color: #102033 !important;
 }
 
@@ -169,7 +167,7 @@ a.venue-badge:hover {
 
 .paper-affiliations {
   list-style: none;
-  margin: 0 auto 0.85rem;
+  margin: 0 auto 0.5rem;
   padding: 0;
   width: min(100%, 40rem);
   text-align: left;
@@ -177,15 +175,15 @@ a.venue-badge:hover {
 }
 
 .paper-affiliations li {
-  font-size: 0.92rem;
-  line-height: 1.58;
+  font-size: 0.88rem;
+  line-height: 1.45;
   color: #334155 !important;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.15rem;
 }
 
 .paper-notes {
-  margin: 0 0 1.25rem;
-  font-size: 0.86rem;
+  margin: 0 0 0.85rem;
+  font-size: 0.84rem;
   color: #64748b !important;
 }
 
@@ -194,7 +192,7 @@ a.venue-badge:hover {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .paper-hero-actions .button {

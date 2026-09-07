@@ -31,7 +31,7 @@ GITHUB_ICON = """<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"
 
 
 def icml_logo(asset_root: str, css_class: str = "venue-logo-official") -> str:
-    src = f'{asset_root.rstrip("/")}/static/icml-logo-white-bg.png'
+    src = f'{asset_root.rstrip("/")}/static/icml-logo.svg'
     return (
         f'<img class="{css_class}" src="{esc(src)}" '
         f'alt="ICML — International Conference on Machine Learning" loading="lazy">'
