@@ -104,12 +104,14 @@ html {
   display: block;
   height: 30px;
   width: auto;
+  border-radius: 6px;
 }
 
 .hub-logo-official {
   display: block;
   height: 26px;
   width: auto;
+  border-radius: 6px;
 }
 
 .venue-year {
@@ -150,6 +152,19 @@ a.venue-badge:hover {
 .author-name {
   font-weight: 600;
   color: #102033;
+}
+
+.author-tag {
+  color: #2563eb;
+  font-weight: 700;
+  font-size: 0.95em;
+  margin-left: 1px;
+}
+
+.author-aff {
+  color: #64748b;
+  font-weight: 500;
+  margin-left: 1px;
 }
 
 .paper-affiliations {

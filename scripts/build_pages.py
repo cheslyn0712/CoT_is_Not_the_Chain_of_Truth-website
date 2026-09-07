@@ -31,7 +31,7 @@ GITHUB_ICON = """<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"
 
 
 def icml_logo(asset_root: str, css_class: str = "venue-logo-official") -> str:
-    src = f'{asset_root.rstrip("/")}/static/icml-logo.svg'
+    src = f'{asset_root.rstrip("/")}/static/icml-logo-white-bg.png'
     return (
         f'<img class="{css_class}" src="{esc(src)}" '
         f'alt="ICML — International Conference on Machine Learning" loading="lazy">'
@@ -66,14 +66,15 @@ def hub_venue_line(p: dict, asset_root: str) -> str:
 def render_authors(authors: list[dict]) -> str:
     chunks = []
     for author in authors:
-        markers = "".join(f"<sup>{i}</sup>" for i in author.get("affs", []))
-        tags = []
+        tag_chars = []
         if author.get("equal"):
-            tags.append("*")
+            tag_chars.append("*")
         if author.get("corresponding"):
-            tags.append("†")
-        suffix = f'<sup class="author-tag">{"".join(tags)}</sup>' if tags else ""
-        chunks.append(f'<span class="author-name">{esc(author["name"])}{markers}{suffix}</span>')
+            tag_chars.append("†")
+        tag_suffix = f'<sup class="author-tag">{"".join(tag_chars)}</sup>' if tag_chars else ""
+        affs = author.get("affs", [])
+        aff_suffix = f'<sup class="author-aff">{",".join(str(i) for i in affs)}</sup>' if affs else ""
+        chunks.append(f'<span class="author-name">{esc(author["name"])}{tag_suffix}{aff_suffix}</span>')
     return '<span class="author-sep">, </span>'.join(chunks)
 
 
@@ -267,6 +268,13 @@ def render_paper_page(p: dict) -> str:
     icml_link = links.get("icmlPoster")
     venue_html = venue_badge_html(p, asset)
 
+    equal_names = ", ".join(a["name"] for a in p["authors"] if a.get("equal"))
+    corr_names = ", ".join(a["name"] for a in p["authors"] if a.get("corresponding"))
+    author_notes = (
+        f'<p class="paper-notes"><sup>*</sup>Equal contribution: {esc(equal_names)} · '
+        f'<sup>†</sup>Corresponding author: {esc(corr_names)}</p>'
+    )
+
     bib = esc(p["bibtex"])
 
     return f"""<!doctype html>
@@ -288,7 +296,7 @@ def render_paper_page(p: dict) -> str:
         <h1>{esc(p["title"])}</h1>
         <p class="paper-authors">{render_authors(p["authors"])}</p>
         <ol class="paper-affiliations">{aff_list}</ol>
-        <p class="paper-notes"><sup>*</sup>Equal contribution · <sup>†</sup>Corresponding author</p>
+        {author_notes}
         <div class="paper-hero-actions">{''.join(action_buttons)}</div>
         <div class="paper-hero-stats">{stats}</div>
       </header>
