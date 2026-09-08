@@ -1,0 +1,105 @@
+{
+  "slug": "cognidir",
+  "published": true,
+  "template": "cognidir",
+  "siteBase": "https://cheslyn0712.github.io/CoT_is_Not_the_Chain_of_Truth-website",
+  "title": "CogniDir: Combating Cognitive Malicious Comments via Adaptive Distributional Learning for Robust Fake News Detection",
+  "shortTitle": "CogniDir",
+  "venue": "EMNLP 2026",
+  "venueId": "emnlp",
+  "year": 2026,
+  "ogFigureKey": "teaser",
+  "tldr": "LLM-generated cognitive malicious comments exploit fact distortion, logical confusion, and emotional manipulation to break comment-aware fake news detectors. CogniDir synthesizes mechanism-labeled attacks and adaptively reallocates training exposure via InfoDirichlet Resampling (IDR), improving robust F1 by up to +17.9% on three cross-lingual benchmarks.",
+  "abstract": "The proliferation of Large Language Models (LLMs) has enabled a new class of psychologically grounded malicious comments, shifting fake news attacks from surface-level textual noise to deep cognitive and logical manipulation. This shift severely undermines existing detectors, which conventionally rely on static attack assumptions and fixed training distributions. To bridge this gap, we introduce CogniDir, an adaptive distributional learning framework that reformulates robust detection as a dynamic data mixture optimization problem for social media content safety. Grounded in cognitive psychology, we first formalize mechanism-specific cognitive adversarial paradigms to systematically expose deep-seated detector vulnerabilities. To address the vulnerability heterogeneity, CogniDir derives an information-theoretic score coupling empirical accuracy with probabilistic confidence, which is then mapped to adaptive sampling proportions through a Dirichlet-mean parameterization. Experimental results on three benchmarks demonstrate that CogniDir yields state-of-the-art robustness, improving F1 scores by up to 17.9% over competitive baselines under heterogeneous, AI-generated adversarial pressures.",
+  "keywords": [
+    "fake news detection",
+    "adversarial comments",
+    "cognitive manipulation",
+    "distributional learning",
+    "InfoDirichlet Resampling",
+    "LLM-generated attacks",
+    "robustness"
+  ],
+  "authorAffiliations": [
+    "Institute of Information Engineering, Chinese Academy of Sciences",
+    "School of Cyber Security, University of Chinese Academy of Sciences",
+    "University of Minnesota",
+    "Queen Mary University of London",
+    "New Laboratory of Pattern Recognition (NLPR), Institute of Automation, Chinese Academy of Sciences",
+    "Shanghai AI Laboratory"
+  ],
+  "authors": [
+    { "name": "Zhao Tong", "affs": [1, 2], "equal": true },
+    { "name": "Chunlin Gong", "affs": [3], "equal": true },
+    { "name": "Yimeng Gu", "affs": [4] },
+    { "name": "Haichao Shi", "affs": [1] },
+    { "name": "Qiang Liu", "affs": [5] },
+    { "name": "Shu Wu", "affs": [5], "corresponding": true },
+    { "name": "Xingcheng Xu", "affs": [6] },
+    { "name": "Xiao-Yu Zhang", "affs": [1], "corresponding": true }
+  ],
+  "links": {
+    "paper": "https://arxiv.org/abs/2510.09712",
+    "pdf": "https://arxiv.org/pdf/2510.09712",
+    "arxiv": "https://arxiv.org/abs/2510.09712",
+    "arxivId": "2510.09712",
+    "code": "https://github.com/cheslyn0712/CogniDir",
+    "venueUrl": "https://2026.emnlp.org/",
+    "conferencePoster": null,
+    "proceedings": null,
+    "openreview": null,
+    "doi": null,
+    "demo": null,
+    "dataset": null
+  },
+  "bibtex": "@misc{tong2026cognidircombatingcognitive,\n      title={CogniDir: Combating Cognitive Malicious Comments via Adaptive Distributional Learning for Robust Fake News Detection}, \n      author={Zhao Tong and Chunlin Gong and Yimeng Gu and Haichao Shi and Qiang Liu and Shu Wu and Xingcheng Xu and Xiao-Yu Zhang},\n      year={2026},\n      eprint={2510.09712},\n      archivePrefix={arXiv},\n      primaryClass={cs.LG},\n      url={https://arxiv.org/abs/2510.09712}, \n},",
+  "methodOverview": "CogniDir operates in three stages: (1) cognitive-grounded malicious comment synthesis with multiple LLMs across fact distortion, logical confusion, and emotional manipulation; (2) InfoDirichlet Resampling (IDR) that maps group-wise vulnerability scores to adaptive training proportions after each epoch; (3) robust evaluation under mixed adversarial comment settings on Weibo16, Weibo20, and RumourEval-19.",
+  "contributions": [
+    "We introduce a cognitive-grounded adversarial synthesis pipeline that generates mechanism-labeled malicious comments, improving training diversity and fidelity.",
+    "We propose CogniDir, a distributional optimization framework where an information-theoretic vulnerability metric adaptively maps group-wise brittleness to feedback-driven sampling allocation.",
+    "We demonstrate state-of-the-art robustness across three cross-lingual benchmarks, narrowing the vulnerability gap under heterogeneous attacks while maintaining high baseline accuracy."
+  ],
+  "mainResults": [
+    "Traditional detectors drop over 18% F1 under diverse cognitive malicious comments; CogniDir maintains F1 above 0.94 across attack categories on Weibo16.",
+    "Relative to the second-best baseline, CogniDir improves robust F1 by +9.0% (Weibo16), +17.9% (Weibo20), and +14.5% (RumourEval-19).",
+    "Under mixed attack settings, CogniDir outperforms the strongest baselines by 8.9–21.1% and reduces mean attack success rate (ASR) by 45% after adaptive training.",
+    "Ablation confirms that malicious comment generation, vulnerability scoring, and Dirichlet allocation are complementary—removing any component causes 11–21 point macro-F1 drops."
+  ],
+  "priorWorkDiff": "Prior comment-aware detectors collapse diverse cognitive attacks into homogeneous noise and train with static sampling ratios, leaving group-wise vulnerability heterogeneity unaddressed. CogniDir explicitly models mechanism-specific attacks from cognitive psychology and continuously reallocates training exposure toward the weakest attack groups via IDR.",
+  "whenToCite": "Cite this paper when discussing robust fake news detection under adversarial or malicious comments, cognitive manipulation attacks (fact distortion, logical confusion, emotional manipulation), LLM-generated adversarial data for social media safety, adaptive or distributional adversarial training, InfoDirichlet or dynamic sampling for robustness, or cross-lingual comment-aware misinformation detection.",
+  "figures": {
+    "teaser": "cognidir_teaser.png",
+    "framework": "cognidir_framework.png",
+    "asrBefore": "cognidir_asr_before.png",
+    "asrAfter": "cognidir_asr_after.png"
+  },
+  "stats": [
+    { "value": "+17.9%", "label": "Best F1 Gain (Weibo20)" },
+    { "value": "3", "label": "Cross-lingual Benchmarks" },
+    { "value": "−45%", "label": "Mean ASR Reduction" },
+    { "value": "IDR", "label": "Adaptive Resampling" }
+  ],
+  "attackCategories": [
+    {
+      "tag": "FACT",
+      "name": "Fact Distortion",
+      "description": "Injects unverified or misleading factual details to create false credibility and encourage dissemination."
+    },
+    {
+      "tag": "LOGIC",
+      "name": "Logical Confusion",
+      "description": "Exploits causal fallacies and contradictory reasoning to undermine the detector's verification boundaries."
+    },
+    {
+      "tag": "EMOTION",
+      "name": "Emotional Manipulation",
+      "description": "Uses affective framing and social pressure to shift attention away from veracity signals in the news–comment pair."
+    }
+  ],
+  "resultsTable": [
+    { "dataset": "Weibo16", "original": "0.955", "attacked": "0.792", "robust": "0.945", "gain": "+9.0%" },
+    { "dataset": "Weibo20", "original": "0.936", "attacked": "0.728", "robust": "0.947", "gain": "+17.9%" },
+    { "dataset": "RumourEval-19", "original": "0.822", "attacked": "0.552", "robust": "0.812", "gain": "+14.5%" }
+  ],
+  "relatedProjects": []
+}

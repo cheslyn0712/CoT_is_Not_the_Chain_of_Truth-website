@@ -6,10 +6,8 @@
 
 <p>
   <a href="https://icml.cc/virtual/2026/poster/61042" target="_blank" rel="noopener noreferrer">
-    <img src="static/icml-navbar-logo.svg" alt="ICML" height="28" align="middle">
+    <img src="static/icml-navbar-logo.svg" alt="ICML" height="28" align="middle"><strong> ICML 2026</strong>
   </a>
-  &nbsp;
-  <a href="https://icml.cc/virtual/2026/poster/61042" target="_blank" rel="noopener noreferrer"><strong>ICML 2026</strong></a>
 </p>
 
 [![arXiv](https://img.shields.io/badge/arXiv-2602.04856-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2602.04856)
@@ -39,7 +37,9 @@ Reasoning LLMs can harbor unsafe planning inside Chain-of-Thought (CoT) traces *
 
 **Generalization:** We show the same routing pattern extends **beyond fake-news generation** to **HarmBench** jailbreak tasks on Flan-UL2 and DeepSeek-R1-70B. Critical-head fine-tuning improves CoT safety on both News (+67.1 avg.) and HarmBench (+55.0 avg.) with only 0.64%–1.95% parameter updates.
 
-**Live project page:** https://cheslyn0712.github.io/CoT_is_Not_the_Chain_of_Truth-website/projects/cot-chain-of-truth/
+**Live project pages:**
+- [CoT is Not the Chain of Truth](https://cheslyn0712.github.io/CoT_is_Not_the_Chain_of_Truth-website/projects/cot-chain-of-truth/)
+- [CogniDir](https://cheslyn0712.github.io/CoT_is_Not_the_Chain_of_Truth-website/projects/cognidir/)
 
 ## Pipeline
 

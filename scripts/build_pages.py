@@ -30,36 +30,67 @@ PDF_ICON = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-
 GITHUB_ICON = """<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.2A6.8 6.8 0 0 0 5.85 14.45c.34.06.47-.14.47-.33v-1.17c-1.9.42-2.3-.81-2.3-.81-.3-.77-.76-.97-.76-.97-.62-.42.05-.41.05-.41.69.05 1.05.7 1.05.7.6 1.04 1.59.74 1.98.56.06-.45.24-.75.44-.92-1.52-.18-3.13-.76-3.13-3.4 0-.75.27-1.36.7-1.84-.07-.17-.3-.88.07-1.84 0 0 .57-.18 1.86.7A6.36 6.36 0 0 1 8 4.4c.58 0 1.16.08 1.7.23 1.29-.88 1.86-.7 1.86-.7.37.96.14 1.67.07 1.84.44.48.7 1.1.7 1.84 0 2.64-1.61 3.21-3.14 3.39.25.22.47.64.47 1.29v1.9c0 .19.13.39.47.33A6.8 6.8 0 0 0 8 1.2z"></path></svg>"""
 
 
-def icml_logo(asset_root: str, css_class: str = "venue-logo-official") -> str:
-    src = f'{asset_root.rstrip("/")}/static/icml-logo.svg'
-    return (
-        f'<img class="{css_class}" src="{esc(src)}" '
-        f'alt="ICML — International Conference on Machine Learning" loading="lazy">'
-    )
+VENUE_LOGOS = {
+    "icml": {
+        "file": "icml-logo.svg",
+        "alt": "ICML — International Conference on Machine Learning",
+        "css": "venue-badge-icml",
+    },
+    "emnlp": {
+        "file": "emnlp-logo.svg",
+        "alt": "EMNLP — Empirical Methods in Natural Language Processing",
+        "css": "venue-badge-emnlp",
+    },
+}
+
+
+def conference_poster(links: dict) -> str | None:
+    return links.get("conferencePoster") or links.get("icmlPoster")
+
+
+def venue_link(links: dict) -> str | None:
+    return conference_poster(links) or links.get("venueUrl")
+
+
+def venue_id(p: dict) -> str:
+    return p.get("venueId") or "icml"
+
+
+def venue_logo(p: dict, asset_root: str, css_class: str = "venue-logo-official") -> str:
+    cfg = VENUE_LOGOS.get(venue_id(p), VENUE_LOGOS["icml"])
+    src = f'{asset_root.rstrip("/")}/static/{cfg["file"]}'
+    return f'<img class="{css_class}" src="{esc(src)}" alt="{esc(cfg["alt"])}" loading="lazy">'
 
 
 def venue_badge_html(p: dict, asset_root: str) -> str:
-    icml_link = p.get("links", {}).get("icmlPoster")
-    if icml_link:
-        logo = icml_logo(asset_root)
+    link = venue_link(p.get("links", {}))
+    if venue_id(p) in VENUE_LOGOS:
+        cfg = VENUE_LOGOS[venue_id(p)]
+        logo = venue_logo(p, asset_root)
         year = esc(p.get("year", ""))
-        return (
-            f'<a class="venue-badge venue-badge-icml" href="{esc(icml_link)}" '
-            f'target="_blank" rel="noopener noreferrer">{logo}<span class="venue-year">{year}</span></a>'
-        )
+        inner = f'{logo}<span class="venue-year">{year}</span>'
+        if link:
+            return (
+                f'<a class="venue-badge {cfg["css"]}" href="{esc(link)}" '
+                f'target="_blank" rel="noopener noreferrer">{inner}</a>'
+            )
+        return f'<span class="venue-badge {cfg["css"]}">{inner}</span>'
     return f'<p class="venue-badge"><span>{esc(p["venue"])}</span></p>'
 
 
 def hub_venue_line(p: dict, asset_root: str) -> str:
-    icml = p.get("links", {}).get("icmlPoster")
+    link = venue_link(p.get("links", {}))
     year = esc(p["year"])
-    if icml:
-        logo = icml_logo(asset_root, "hub-logo-official")
-        return (
-            f'<p class="hub-venue">'
-            f'<a class="hub-venue-logo" href="{esc(icml)}" target="_blank" rel="noopener noreferrer">{logo}</a>'
-            f'<span class="hub-venue-sep">·</span><span class="hub-venue-year">{year}</span></p>'
-        )
+    if venue_id(p) in VENUE_LOGOS:
+        logo = venue_logo(p, asset_root, "hub-logo-official")
+        inner = f'{logo}<span class="hub-venue-sep">·</span><span class="hub-venue-year">{year}</span>'
+        if link:
+            return (
+                f'<p class="hub-venue">'
+                f'<a class="hub-venue-logo" href="{esc(link)}" target="_blank" rel="noopener noreferrer">{logo}</a>'
+                f'<span class="hub-venue-sep">·</span><span class="hub-venue-year">{year}</span></p>'
+            )
+        return f'<p class="hub-venue">{inner}</p>'
     return f'<p class="hub-venue"><span>{esc(p["venue"])}</span><span class="hub-venue-sep">·</span><span>{year}</span></p>'
 
 
@@ -94,7 +125,8 @@ def render_head(p: dict, canonical: str) -> str:
         f'  <meta name="citation_author" content="{esc(author_citation_name(a["name"]))}">' for a in p["authors"]
     )
 
-    og_image = f'{p["siteBase"]}/data/figures/teaser_figure1.png'
+    teaser_key = p.get("ogFigureKey", "teaser")
+    og_image = f'{p["siteBase"]}/data/figures/{p["figures"][teaser_key]}'
     links = p["links"]
 
     json_ld = {
@@ -109,8 +141,9 @@ def render_head(p: dict, canonical: str) -> str:
         "isPartOf": {"@type": "PublicationEvent", "name": p["venue"]},
         "sameAs": [links["arxiv"], links["code"]],
     }
-    if links.get("icmlPoster"):
-        json_ld["sameAs"].append(links["icmlPoster"])
+    poster = conference_poster(links)
+    if poster:
+        json_ld["sameAs"].append(poster)
     if links.get("pdf"):
         json_ld["associatedMedia"] = {"@type": "MediaObject", "contentUrl": links["pdf"]}
 
@@ -174,21 +207,177 @@ def fig_file(p: dict, filename: str, alt: str, caption: str, css_class: str = "f
 </figure>"""
 
 
-def render_paper_page(p: dict) -> str:
-    asset = p["_assetRoot"]
-    canonical = f'{p["siteBase"]}/projects/{p["slug"]}/'
-    links = p["links"]
-
-    action_buttons = [
+def build_action_buttons(links: dict) -> list[str]:
+    buttons = [
         f'<a class="button primary" href="{esc(links["pdf"])}" target="_blank" rel="noopener noreferrer"><span class="button-icon">{PDF_ICON}</span><span>PDF</span></a>',
         f'<a class="button code-link" href="{esc(links["code"])}" target="_blank" rel="noopener noreferrer"><span class="button-icon github-icon">{GITHUB_ICON}</span><span>Code</span></a>',
     ]
     if links.get("dataset"):
-        action_buttons.append(f'<a class="button" href="{esc(links["dataset"])}" target="_blank" rel="noopener noreferrer">Data</a>')
+        buttons.append(f'<a class="button" href="{esc(links["dataset"])}" target="_blank" rel="noopener noreferrer">Data</a>')
     if links.get("demo"):
-        action_buttons.append(f'<a class="button" href="{esc(links["demo"])}" target="_blank" rel="noopener noreferrer">Demo</a>')
+        buttons.append(f'<a class="button" href="{esc(links["demo"])}" target="_blank" rel="noopener noreferrer">Demo</a>')
     if links.get("openreview"):
-        action_buttons.append(f'<a class="button" href="{esc(links["openreview"])}" target="_blank" rel="noopener noreferrer">OpenReview</a>')
+        buttons.append(f'<a class="button" href="{esc(links["openreview"])}" target="_blank" rel="noopener noreferrer">OpenReview</a>')
+    return buttons
+
+
+def author_notes_html(p: dict) -> str:
+    equal_names = ", ".join(a["name"] for a in p["authors"] if a.get("equal"))
+    corr_names = ", ".join(a["name"] for a in p["authors"] if a.get("corresponding"))
+    return (
+        f'<p class="paper-notes"><sup>*</sup>Equal contribution: {esc(equal_names)} · '
+        f'<sup>†</sup>Corresponding author: {esc(corr_names)}</p>'
+    )
+
+
+def render_paper_page(p: dict) -> str:
+    template = p.get("template", "cot")
+    if template == "cognidir":
+        return render_cognidir_paper_page(p)
+    return render_cot_paper_page(p)
+
+
+def render_cognidir_paper_page(p: dict) -> str:
+    asset = p["_assetRoot"]
+    canonical = f'{p["siteBase"]}/projects/{p["slug"]}/'
+    links = p["links"]
+
+    aff_list = "".join(
+        f"<li><sup>{i + 1}</sup>{esc(a)}</li>" for i, a in enumerate(p["authorAffiliations"])
+    )
+    stats = "".join(
+        f'<div class="paper-stat"><strong>{esc(s["value"])}</strong><span>{esc(s["label"])}</span></div>'
+        for s in p.get("stats", [])
+    )
+    contributions = "".join(f"<li>{esc(c)}</li>" for c in p["contributions"])
+    main_results = "".join(f"<li>{esc(r)}</li>" for r in p["mainResults"])
+
+    taxonomy = "".join(
+        f"""<article class="taxonomy-card">
+  <span class="taxonomy-tag">{esc(c["tag"])}</span>
+  <h3>{esc(c["name"])}</h3>
+  <p>{esc(c["description"])}</p>
+</article>"""
+        for c in p["attackCategories"]
+    )
+
+    result_rows = "".join(
+        f"<tr><td><strong>{esc(r['dataset'])}</strong></td><td>{esc(r['original'])}</td>"
+        f"<td>{esc(r['attacked'])}</td><td>{esc(r['robust'])}</td><td>{esc(r['gain'])}</td></tr>"
+        for r in p["resultsTable"]
+    )
+
+    nav = """
+      <a href="#framework">Framework</a>
+      <a href="#attacks">Attack Types</a>
+      <a href="#results">Results</a>
+      <a href="#bibtex">BibTeX</a>"""
+
+    bib = esc(p["bibtex"])
+
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+{render_head(p, canonical)}
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header site-header-nav-only">
+      <nav class="site-nav">{nav}
+        <a href="{esc(links['pdf'])}" target="_blank" rel="noopener noreferrer">PDF</a>
+      </nav>
+    </header>
+
+    <main class="paper-page" id="top">
+      <header class="paper-hero">
+        {venue_badge_html(p, asset)}
+        <h1>{esc(p["title"])}</h1>
+        <p class="paper-authors">{render_authors(p["authors"])}</p>
+        <ol class="paper-affiliations">{aff_list}</ol>
+        {author_notes_html(p)}
+        <div class="paper-hero-actions">{''.join(build_action_buttons(links))}</div>
+        <div class="paper-hero-stats">{stats}</div>
+      </header>
+
+      <section class="paper-section" id="tldr">
+        <h2>TL;DR</h2>
+        <p class="lead-text">{esc(p["tldr"])}</p>
+      </section>
+
+      <section class="paper-section" id="framework">
+        <h2>Framework</h2>
+        <p class="section-text">{esc(p["methodOverview"])}</p>
+        {fig(p, "framework", "CogniDir framework overview", "<strong>Framework overview.</strong> Cognitive malicious comment synthesis, InfoDirichlet Resampling (IDR), and robust evaluation under mixed attack settings.", "figure-full")}
+      </section>
+
+      <section class="paper-section" id="contributions">
+        <h2>Key Contributions</h2>
+        <ul class="section-list">{contributions}</ul>
+      </section>
+
+      <section class="paper-section" id="introduction">
+        <h2>Cognitive Attacks Break Static Defenses</h2>
+        <p class="section-text">LLM-generated malicious comments exploit distinct cognitive mechanisms. Traditional detectors suffer &gt;18% F1 drops under heterogeneous attacks, while CogniDir narrows the gap and maintains F1 above 0.94 across attack categories.</p>
+        {fig(p, "teaser", "Group-wise F1 comparison under cognitive malicious comments", "<strong>Figure 1.</strong> Group-wise F1 on Weibo16: prior methods drop sharply under diverse malicious comments; CogniDir maintains high robust F1.", "figure-teaser")}
+      </section>
+
+      <section class="paper-section" id="attacks">
+        <h2>Cognitive Attack Taxonomy</h2>
+        <p class="section-text">Grounded in cognitive psychology, we categorize adversarial comments into three complementary mechanisms and synthesize mechanism-labeled training data with multiple LLMs.</p>
+        <div class="taxonomy-grid">{taxonomy}</div>
+      </section>
+
+      <section class="paper-section" id="results">
+        <h2>Main Results</h2>
+        <ul class="section-list">{main_results}</ul>
+
+        <h3 class="subsection-title">Robust F1 Across Benchmarks</h3>
+        <p class="section-text">O = original detection, A = under attack, R = after robust training (all F1). Δ Improve is relative gain over the second-best baseline.</p>
+        <div class="table-wrap full-width-table">
+          <table class="data-table compact">
+            <thead><tr><th>Dataset</th><th>O</th><th>A</th><th>R</th><th>Δ Improve</th></tr></thead>
+            <tbody>{result_rows}</tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-title">Attack Success Rate (ASR)</h3>
+        <p class="section-text">Without adversarial training, attack success rates remain high across comment counts and attack types. CogniDir reduces mean ASR by 45% after adaptive training.</p>
+        <div class="layer-grid">
+          {fig(p, "asrBefore", "ASR before robust training", "<strong>Before training.</strong> High ASR under fact distortion, logical confusion, and emotional manipulation.", "figure-compact-inline")}
+          {fig(p, "asrAfter", "ASR after CogniDir training", "<strong>After CogniDir.</strong> ASR drops substantially across attack types and comment counts.", "figure-compact-inline")}
+        </div>
+      </section>
+
+      <section class="paper-section" id="method">
+        <h2>How This Differs From Prior Work</h2>
+        <p class="section-text">{esc(p["priorWorkDiff"])}</p>
+      </section>
+
+      <section class="paper-section" id="cite">
+        <h2>When to Cite This Paper</h2>
+        <p class="section-text">{esc(p["whenToCite"])}</p>
+      </section>
+
+      <section class="paper-section" id="bibtex">
+        <h2>BibTeX</h2>
+        <p class="section-text">Download: <a href="./paper.bib" download="cognidir.bib">paper.bib</a></p>
+        <pre class="codeblock bibtex-block"><code id="bibtex-content">{bib}</code></pre>
+        <button class="button" type="button" id="copy-bibtex">Copy BibTeX</button>
+      </section>
+    </main>
+  </div>
+  <script src="{esc(asset)}/static/copy-bibtex.js" defer></script>
+</body>
+</html>
+"""
+
+
+def render_cot_paper_page(p: dict) -> str:
+    asset = p["_assetRoot"]
+    canonical = f'{p["siteBase"]}/projects/{p["slug"]}/'
+    links = p["links"]
+
+    action_buttons = build_action_buttons(links)
 
     aff_list = "".join(
         f"<li><sup>{i + 1}</sup>{esc(a)}</li>" for i, a in enumerate(p["authorAffiliations"])
@@ -265,15 +454,9 @@ def render_paper_page(p: dict) -> str:
       <a href="#method">Method</a>
       <a href="#bibtex">BibTeX</a>"""
 
-    icml_link = links.get("icmlPoster")
     venue_html = venue_badge_html(p, asset)
 
-    equal_names = ", ".join(a["name"] for a in p["authors"] if a.get("equal"))
-    corr_names = ", ".join(a["name"] for a in p["authors"] if a.get("corresponding"))
-    author_notes = (
-        f'<p class="paper-notes"><sup>*</sup>Equal contribution: {esc(equal_names)} · '
-        f'<sup>†</sup>Corresponding author: {esc(corr_names)}</p>'
-    )
+    author_notes = author_notes_html(p)
 
     bib = esc(p["bibtex"])
 

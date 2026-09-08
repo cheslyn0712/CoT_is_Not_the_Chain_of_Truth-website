@@ -100,6 +100,24 @@ html {
   letter-spacing: 0;
 }
 
+.venue-badge-emnlp {
+  text-transform: none;
+  letter-spacing: 0;
+  background: rgba(237, 28, 36, 0.12);
+  border-color: rgba(237, 28, 36, 0.35);
+  color: #ffb4b8;
+}
+
+a.venue-badge.venue-badge-emnlp:hover,
+span.venue-badge.venue-badge-emnlp:hover {
+  background: rgba(237, 28, 36, 0.2);
+  border-color: rgba(237, 28, 36, 0.55);
+}
+
+.venue-badge-emnlp .venue-year {
+  color: #ffb4b8;
+}
+
 .venue-logo-official {
   display: block;
   height: 26px;
