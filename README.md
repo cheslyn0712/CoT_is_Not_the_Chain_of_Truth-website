@@ -38,13 +38,3 @@ python scripts/build_pages.py
 python -m http.server 8000
 # open http://localhost:8000/projects/
 ```
-
-## Custom domain (optional)
-
-To serve at `https://chunlingong.me/projects/<slug>/` instead of `github.io/<repo>/projects/<slug>/`:
-
-1. Add a `CNAME` file with `chunlingong.me` and configure DNS → GitHub Pages.
-2. Set `siteBase` in each `papers/*.json` to `https://chunlingong.me`.
-3. Re-run `python scripts/build_pages.py`.
-
-This changes the public URL only; page structure and SEO metadata stay the same.
