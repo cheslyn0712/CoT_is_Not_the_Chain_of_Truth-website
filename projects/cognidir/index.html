@@ -13,12 +13,9 @@
   <meta property="og:title" content="CogniDir: Combating Cognitive Malicious Comments via Adaptive Distributional Learning for Robust Fake News Detection">
   <meta property="og:description" content="LLM-generated cognitive malicious comments exploit fact distortion, logical confusion, and emotional manipulation to break comment-aware fake news detectors. CogniDir synthesizes mechanism-labeled attacks and adaptively reallocates training exposure via InfoDirichlet Resampling (IDR), improving robu">
   <meta property="og:url" content="https://cheslyn0712.github.io/CoT_is_Not_the_Chain_of_Truth-website/projects/cognidir/">
-  <meta property="og:image" content="https://cheslyn0712.github.io/CoT_is_Not_the_Chain_of_Truth-website/data/figures/cognidir_teaser.png">
-
-  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="CogniDir">
   <meta name="twitter:description" content="LLM-generated cognitive malicious comments exploit fact distortion, logical confusion, and emotional manipulation to break comment-aware fake news detectors. CogniDir synthesizes mechanism-labeled attacks and adaptively reallocates training exposure via InfoDirichlet Resampling (IDR), improving robu">
-  <meta name="twitter:image" content="https://cheslyn0712.github.io/CoT_is_Not_the_Chain_of_Truth-website/data/figures/cognidir_teaser.png">
 
   <meta name="citation_title" content="CogniDir: Combating Cognitive Malicious Comments via Adaptive Distributional Learning for Robust Fake News Detection">
   <meta name="citation_author" content="Tong, Zhao">
@@ -138,18 +135,22 @@
       <section class="paper-section" id="teaser">
         <h2>Cognitive Attacks Break Static Defenses</h2>
         <p class="section-text">LLM-generated malicious comments exploit distinct cognitive mechanisms. Traditional detectors suffer &gt;18% F1 drops under heterogeneous attacks, while CogniDir narrows the gap and maintains F1 above 0.94 across attack categories.</p>
-        <figure class="paper-figure figure-teaser">
-  <img src="../../data/figures/cognidir_teaser.png" alt="Group-wise F1 comparison under cognitive malicious comments" loading="lazy">
-  <figcaption><strong>Figure 1.</strong> Group-wise F1 on Weibo16: prior methods drop sharply under diverse malicious comments; CogniDir maintains high robust F1.</figcaption>
+        <figure class="paper-figure figure-teaser figure-pdf">
+  <object data="../../data/figures/cognidir/Teaser0120_clean_noborder.pdf" type="application/pdf" aria-label="Group-wise F1 comparison under cognitive malicious comments">
+    <p class="figure-fallback"><a href="../../data/figures/cognidir/Teaser0120_clean_noborder.pdf" target="_blank" rel="noopener noreferrer">Open Group-wise F1 comparison under cognitive malicious comments (PDF)</a></p>
+  </object>
+  <figcaption><strong>Figure 1.</strong> Group-wise F1 on Weibo16: prior methods drop sharply under diverse malicious comments; CogniDir maintains high robust F1. · <a href="../../data/figures/cognidir/Teaser0120_clean_noborder.pdf" target="_blank" rel="noopener">Original file</a></figcaption>
 </figure>
       </section>
 
       <section class="paper-section" id="framework">
         <h2>Framework</h2>
         <p class="section-text">CogniDir operates in three stages: (1) cognitive-grounded malicious comment synthesis with multiple LLMs across fact distortion, logical confusion, and emotional manipulation; (2) InfoDirichlet Resampling (IDR) that maps group-wise vulnerability scores to adaptive training proportions after each epoch; (3) robust evaluation under mixed adversarial comment settings on Weibo16, Weibo20, and RumourEval-19.</p>
-        <figure class="paper-figure figure-full">
-  <img src="../../data/figures/cognidir_framework.png" alt="CogniDir framework overview" loading="lazy">
-  <figcaption><strong>Figure 2.</strong> Cognitive malicious comment synthesis, InfoDirichlet Resampling (IDR), and robust evaluation under mixed attack settings.</figcaption>
+        <figure class="paper-figure figure-full figure-pdf">
+  <object data="../../data/figures/cognidir/Method1833_clean_notext_0826.pdf" type="application/pdf" aria-label="CogniDir framework overview">
+    <p class="figure-fallback"><a href="../../data/figures/cognidir/Method1833_clean_notext_0826.pdf" target="_blank" rel="noopener noreferrer">Open CogniDir framework overview (PDF)</a></p>
+  </object>
+  <figcaption><strong>Figure 2.</strong> Cognitive malicious comment synthesis, InfoDirichlet Resampling (IDR), and robust evaluation under mixed attack settings. · <a href="../../data/figures/cognidir/Method1833_clean_notext_0826.pdf" target="_blank" rel="noopener">Original file</a></figcaption>
 </figure>
       </section>
 
@@ -208,21 +209,27 @@
         <h3 class="subsection-title">Attack Success Rate (ASR)</h3>
         <p class="section-text">Without adversarial training, attack success rates remain high across comment counts and attack types. CogniDir reduces mean ASR by 45% after adaptive training.</p>
         <div class="asr-grid">
-          <figure class="paper-figure figure-asr">
-  <img src="../../data/figures/cognidir_asr_before.png" alt="ASR before robust training" loading="lazy">
-  <figcaption><strong>Figure 3a.</strong> ASR before robust training under varying attack types and comment counts.</figcaption>
+          <figure class="paper-figure figure-asr figure-pdf">
+  <object data="../../data/figures/cognidir/ASR_ori_grid.pdf" type="application/pdf" aria-label="ASR before robust training">
+    <p class="figure-fallback"><a href="../../data/figures/cognidir/ASR_ori_grid.pdf" target="_blank" rel="noopener noreferrer">Open ASR before robust training (PDF)</a></p>
+  </object>
+  <figcaption><strong>Figure 3a.</strong> ASR before robust training under varying attack types and comment counts. · <a href="../../data/figures/cognidir/ASR_ori_grid.pdf" target="_blank" rel="noopener">Original file</a></figcaption>
 </figure>
-          <figure class="paper-figure figure-asr">
-  <img src="../../data/figures/cognidir_asr_after.png" alt="ASR after CogniDir training" loading="lazy">
-  <figcaption><strong>Figure 3b.</strong> ASR after robust training — substantial reduction across attack types.</figcaption>
+          <figure class="paper-figure figure-asr figure-pdf">
+  <object data="../../data/figures/cognidir/ASR_com_grid.pdf" type="application/pdf" aria-label="ASR after CogniDir training">
+    <p class="figure-fallback"><a href="../../data/figures/cognidir/ASR_com_grid.pdf" target="_blank" rel="noopener noreferrer">Open ASR after CogniDir training (PDF)</a></p>
+  </object>
+  <figcaption><strong>Figure 3b.</strong> ASR after robust training — substantial reduction across attack types. · <a href="../../data/figures/cognidir/ASR_com_grid.pdf" target="_blank" rel="noopener">Original file</a></figcaption>
 </figure>
         </div>
 
         <h3 class="subsection-title">Adaptive Robustness During Training</h3>
         <p class="section-text">Validation accuracy rises for all attack groups and the inter-group gap shrinks from 0.23 to 0.08, showing IDR reallocates learning toward weaker mechanisms.</p>
-        <figure class="paper-figure figure-large">
-  <img src="../../data/figures/cognidir_convergence.png" alt="Validation accuracy convergence across attack groups" loading="lazy">
-  <figcaption><strong>Figure 4.</strong> Group-wise validation accuracy during training — Fact Distortion, Logical Confusion, and Emotional Manipulation.</figcaption>
+        <figure class="paper-figure figure-large figure-pdf">
+  <object data="../../data/figures/cognidir/VAL_grid.pdf" type="application/pdf" aria-label="Validation accuracy convergence across attack groups">
+    <p class="figure-fallback"><a href="../../data/figures/cognidir/VAL_grid.pdf" target="_blank" rel="noopener noreferrer">Open Validation accuracy convergence across attack groups (PDF)</a></p>
+  </object>
+  <figcaption><strong>Figure 4.</strong> Group-wise validation accuracy during training — Fact Distortion, Logical Confusion, and Emotional Manipulation. · <a href="../../data/figures/cognidir/VAL_grid.pdf" target="_blank" rel="noopener">Original file</a></figcaption>
 </figure>
 
         <h3 class="subsection-title">Ablation Study</h3>

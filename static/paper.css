@@ -352,6 +352,28 @@ a.venue-badge:hover {
   max-width: 100%;
 }
 
+.figure-pdf object {
+  display: block;
+  width: 100%;
+  min-height: 280px;
+  border: none;
+  background: #fff;
+}
+
+.figure-teaser.figure-pdf object {
+  max-width: min(560px, 100%);
+  min-height: 220px;
+  margin: 0 auto;
+}
+
+.figure-full.figure-pdf object {
+  min-height: 420px;
+}
+
+.figure-asr.figure-pdf object {
+  min-height: 360px;
+}
+
 .asr-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -363,6 +385,11 @@ a.venue-badge:hover {
   display: block;
   width: 100%;
   height: auto;
+}
+
+.figure-fallback {
+  margin: 0.5rem 0;
+  text-align: center;
 }
 
 .scroll-x {

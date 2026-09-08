@@ -67,12 +67,13 @@
   ],
   "priorWorkDiff": "Prior comment-aware detectors collapse diverse cognitive attacks into homogeneous noise and train with static sampling ratios, leaving group-wise vulnerability heterogeneity unaddressed. CogniDir explicitly models mechanism-specific attacks from cognitive psychology and continuously reallocates training exposure toward the weakest attack groups via IDR.",
   "whenToCite": "Cite this paper when discussing robust fake news detection under adversarial or malicious comments, cognitive manipulation attacks (fact distortion, logical confusion, emotional manipulation), LLM-generated adversarial data for social media safety, adaptive or distributional adversarial training, InfoDirichlet or dynamic sampling for robustness, or cross-lingual comment-aware misinformation detection.",
+  "figureDir": "cognidir",
   "figures": {
-    "teaser": "cognidir_teaser.png",
-    "framework": "cognidir_framework.png",
-    "asrBefore": "cognidir_asr_before.png",
-    "asrAfter": "cognidir_asr_after.png",
-    "convergence": "cognidir_convergence.png"
+    "teaser": "Teaser0120_clean_noborder.pdf",
+    "framework": "Method1833_clean_notext_0826.pdf",
+    "asrBefore": "ASR_ori_grid.pdf",
+    "asrAfter": "ASR_com_grid.pdf",
+    "convergence": "VAL_grid.pdf"
   },
   "stats": [
     { "value": "+17.9%", "label": "Best F1 Gain (Weibo20)" },

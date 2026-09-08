@@ -126,7 +126,22 @@ def render_head(p: dict, canonical: str) -> str:
     )
 
     teaser_key = p.get("ogFigureKey", "teaser")
-    og_image = f'{p["siteBase"]}/data/figures/{p["figures"][teaser_key]}'
+    teaser_file = p["figures"].get(teaser_key, "")
+    if teaser_file and not teaser_file.lower().endswith(".pdf"):
+        if p.get("figureDir"):
+            og_image = f'{p["siteBase"]}/data/figures/{p["figureDir"]}/{teaser_file}'
+        else:
+            og_image = f'{p["siteBase"]}/data/figures/{teaser_file}'
+        social_meta = f"""  <meta property="og:image" content="{esc(og_image)}">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{esc(p["shortTitle"])}">
+  <meta name="twitter:description" content="{esc(desc)}">
+  <meta name="twitter:image" content="{esc(og_image)}">"""
+    else:
+        social_meta = f"""  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{esc(p["shortTitle"])}">
+  <meta name="twitter:description" content="{esc(desc)}">"""
     links = p["links"]
 
     json_ld = {
@@ -163,12 +178,7 @@ def render_head(p: dict, canonical: str) -> str:
   <meta property="og:title" content="{esc(p["title"])}">
   <meta property="og:description" content="{esc(desc)}">
   <meta property="og:url" content="{esc(canonical)}">
-  <meta property="og:image" content="{esc(og_image)}">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{esc(p["shortTitle"])}">
-  <meta name="twitter:description" content="{esc(desc)}">
-  <meta name="twitter:image" content="{esc(og_image)}">
+{social_meta}
 
   <meta name="citation_title" content="{esc(p["title"])}">
 {citation_authors}
@@ -189,9 +199,24 @@ def render_head(p: dict, canonical: str) -> str:
   <link rel="stylesheet" href="{esc(p["_assetRoot"])}/static/paper.css">"""
 
 
+def figure_src(p: dict, filename: str) -> str:
+    base = f'{p["_assetRoot"]}/data/figures'
+    if p.get("figureDir"):
+        return f"{base}/{p['figureDir']}/{filename}"
+    return f"{base}/{filename}"
+
+
 def fig(p: dict, key: str, alt: str, caption: str, css_class: str = "figure-medium") -> str:
-    src = f'{p["_assetRoot"]}/data/figures/{p["figures"][key]}'
-    cap = f"<figcaption>{caption}</figcaption>" if caption else ""
+    filename = p["figures"][key]
+    src = figure_src(p, filename)
+    cap = f"<figcaption>{caption} · <a href=\"{esc(src)}\" target=\"_blank\" rel=\"noopener\">Original file</a></figcaption>" if caption else ""
+    if filename.lower().endswith(".pdf"):
+        return f"""<figure class="paper-figure {css_class} figure-pdf">
+  <object data="{esc(src)}" type="application/pdf" aria-label="{esc(alt)}">
+    <p class="figure-fallback"><a href="{esc(src)}" target="_blank" rel="noopener noreferrer">Open {esc(alt)} (PDF)</a></p>
+  </object>
+  {cap}
+</figure>"""
     return f"""<figure class="paper-figure {css_class}">
   <img src="{esc(src)}" alt="{esc(alt)}" loading="lazy">
   {cap}
@@ -199,8 +224,18 @@ def fig(p: dict, key: str, alt: str, caption: str, css_class: str = "figure-medi
 
 
 def fig_file(p: dict, filename: str, alt: str, caption: str, css_class: str = "figure-medium") -> str:
-    src = f'{p["_assetRoot"]}/data/figures/{filename}'
+    if p.get("figureDir"):
+        src = f'{p["_assetRoot"]}/data/figures/{p["figureDir"]}/{filename}'
+    else:
+        src = f'{p["_assetRoot"]}/data/figures/{filename}'
     cap = f"<figcaption>{caption}</figcaption>" if caption else ""
+    if filename.lower().endswith(".pdf"):
+        return f"""<figure class="paper-figure {css_class} figure-pdf">
+  <object data="{esc(src)}" type="application/pdf" aria-label="{esc(alt)}">
+    <p class="figure-fallback"><a href="{esc(src)}" target="_blank" rel="noopener noreferrer">Open {esc(alt)} (PDF)</a></p>
+  </object>
+  {cap}
+</figure>"""
     return f"""<figure class="paper-figure {css_class}">
   <img src="{esc(src)}" alt="{esc(alt)}" loading="lazy">
   {cap}

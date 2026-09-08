@@ -33,7 +33,7 @@ Adaptive distributional learning for robust fake news detection against cognitiv
 ## Build
 
 ```bash
-python scripts/prepare_cognidir_figures.py   # CogniDir: render latex/figs PDFs → PNG
+python scripts/copy_cognidir_figures.py   # CogniDir: copy latex/figs PDFs verbatim (no conversion)
 python scripts/build_pages.py
 python -m http.server 8000
 # open http://localhost:8000/projects/
