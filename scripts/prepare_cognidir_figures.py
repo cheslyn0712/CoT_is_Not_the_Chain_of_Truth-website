@@ -1,24 +1,44 @@
-"""Extract CogniDir figures from arXiv PDF into data/figures/."""
+"""Convert CogniDir LaTeX figure PDFs (latex/figs/) to PNG for the project website."""
+
+from __future__ import annotations
 
 from pathlib import Path
 
 import fitz
 
-PDF = Path(r"D:\桌面\PhD_Reseach\EMNLP_2026\EMNLP2026\latex\paper.pdf")
+SRC = Path(r"D:\桌面\PhD_Reseach\EMNLP_2026\EMNLP2026\latex\figs")
 OUT = Path(__file__).resolve().parents[1] / "data" / "figures"
 OUT.mkdir(parents=True, exist_ok=True)
 
-CROPS = {
-    "cognidir_teaser.png": (1, fitz.Rect(50, 120, 560, 420)),
-    "cognidir_framework.png": (4, fitz.Rect(40, 120, 560, 320)),
-    "cognidir_asr_before.png": (6, fitz.Rect(40, 80, 560, 340)),
-    "cognidir_asr_after.png": (6, fitz.Rect(40, 360, 560, 620)),
+# Source PDFs referenced in acl_latex.tex — render each file in full, never crop from paper.pdf.
+FIGURES = {
+    "cognidir_teaser.png": "Teaser0120_clean_noborder.pdf",
+    "cognidir_framework.png": "Method1833_clean_notext_0826.pdf",
+    "cognidir_asr_before.png": "ASR_ori_grid.pdf",
+    "cognidir_asr_after.png": "ASR_com_grid.pdf",
+    "cognidir_convergence.png": "VAL_grid.pdf",
 }
 
-doc = fitz.open(PDF)
-for name, (page_no, rect) in CROPS.items():
-    page = doc[page_no - 1]
-    pix = page.get_pixmap(matrix=fitz.Matrix(2.5, 2.5), clip=rect, alpha=False)
-    path = OUT / name
-    pix.save(path)
-    print("saved", path.name, pix.width, pix.height)
+SCALE = 3.0
+
+
+def render_pdf(pdf_path: Path, out_path: Path) -> None:
+    doc = fitz.open(pdf_path)
+    page = doc[0]
+    pix = page.get_pixmap(matrix=fitz.Matrix(SCALE, SCALE), alpha=False)
+    pix.save(out_path)
+    print(f"saved {out_path.name} ({pix.width}x{pix.height}) from {pdf_path.name}")
+
+
+def main() -> None:
+    if not SRC.is_dir():
+        raise SystemExit(f"Missing figure source directory: {SRC}")
+    for out_name, src_name in FIGURES.items():
+        src = SRC / src_name
+        if not src.is_file():
+            raise SystemExit(f"Missing source figure: {src}")
+        render_pdf(src, OUT / out_name)
+
+
+if __name__ == "__main__":
+    main()

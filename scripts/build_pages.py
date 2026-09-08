@@ -237,6 +237,93 @@ def render_paper_page(p: dict) -> str:
     return render_cot_paper_page(p)
 
 
+def render_metric_cells(values: list[str], highlight: bool = False) -> str:
+    tag_open = "<strong>" if highlight else ""
+    tag_close = "</strong>" if highlight else ""
+    return "".join(f"<td>{tag_open}{esc(v)}{tag_close}</td>" for v in values)
+
+
+def render_cognidir_main_table(table: dict) -> str:
+    body_rows = []
+    for group in table["groups"]:
+        rows = group["rows"]
+        for index, row in enumerate(rows):
+            highlight = bool(row.get("highlight"))
+            model = f"<strong>{esc(row['model'])}</strong>" if highlight else esc(row["model"])
+            type_cell = ""
+            if index == 0:
+                type_cell = f'<td rowspan="{len(rows)}"><strong>{esc(group["type"])}</strong></td>'
+            body_rows.append(
+                f"<tr>{type_cell}<td>{model}</td>"
+                f"{render_metric_cells(row['weibo16'], highlight)}"
+                f"{render_metric_cells(row['weibo20'], highlight)}"
+                f"{render_metric_cells(row['rumour'], highlight)}</tr>"
+            )
+
+    improvements = table["improvements"]
+    improve_row = (
+        f'<tr class="table-highlight-row"><td colspan="2"><strong>Δ Improve</strong></td>'
+        f"{render_metric_cells(improvements[:3], True)}"
+        f"{render_metric_cells(improvements[3:6], True)}"
+        f"{render_metric_cells(improvements[6:9], True)}</tr>"
+    )
+    return f"""<div class="table-wrap full-width-table scroll-x">
+  <table class="data-table compact results-matrix">
+    <thead>
+      <tr>
+        <th>Type</th><th>Model</th>
+        <th colspan="3">Weibo16</th>
+        <th colspan="3">Weibo20</th>
+        <th colspan="3">RumourEval-19</th>
+      </tr>
+      <tr>
+        <th colspan="2"></th>
+        <th>O</th><th>A</th><th>R</th>
+        <th>O</th><th>A</th><th>R</th>
+        <th>O</th><th>A</th><th>R</th>
+      </tr>
+    </thead>
+    <tbody>
+      {''.join(body_rows)}
+      {improve_row}
+    </tbody>
+  </table>
+</div>"""
+
+
+def render_cognidir_ablation_table(table: dict) -> str:
+    rows_html = []
+    dataset_counts: dict[str, int] = {}
+    for row in table["rows"]:
+        dataset_counts[row["dataset"]] = dataset_counts.get(row["dataset"], 0) + 1
+
+    seen: dict[str, int] = {}
+    for row in table["rows"]:
+        dataset = row["dataset"]
+        seen[dataset] = seen.get(dataset, 0) + 1
+        dataset_cell = ""
+        if seen[dataset] == 1:
+            dataset_cell = f'<td rowspan="{dataset_counts[dataset]}"><strong>{esc(dataset)}</strong></td>'
+
+        highlight = bool(row.get("highlight"))
+        method = f"<strong>{esc(row['method'])}</strong>" if highlight else esc(row["method"])
+        value = lambda key: f"<strong>{esc(row[key])}</strong>" if highlight else esc(row[key])
+        rows_html.append(
+            f"<tr>{dataset_cell}<td>{method}</td>"
+            f"<td>{value('macroF1')}</td><td>{value('acc')}</td>"
+            f"<td>{value('f1Real')}</td><td>{value('f1Fake')}</td></tr>"
+        )
+
+    return f"""<div class="table-wrap full-width-table scroll-x">
+  <table class="data-table compact">
+    <thead>
+      <tr><th>Dataset</th><th>Method</th><th>Macro-F1</th><th>Acc.</th><th>F1-real</th><th>F1-fake</th></tr>
+    </thead>
+    <tbody>{''.join(rows_html)}</tbody>
+  </table>
+</div>"""
+
+
 def render_cognidir_paper_page(p: dict) -> str:
     asset = p["_assetRoot"]
     canonical = f'{p["siteBase"]}/projects/{p["slug"]}/'
@@ -261,15 +348,14 @@ def render_cognidir_paper_page(p: dict) -> str:
         for c in p["attackCategories"]
     )
 
-    result_rows = "".join(
-        f"<tr><td><strong>{esc(r['dataset'])}</strong></td><td>{esc(r['original'])}</td>"
-        f"<td>{esc(r['attacked'])}</td><td>{esc(r['robust'])}</td><td>{esc(r['gain'])}</td></tr>"
-        for r in p["resultsTable"]
-    )
+    result_rows = render_cognidir_main_table(p["mainResultsTable"])
+    ablation_table = render_cognidir_ablation_table(p["ablationTable"])
+    main_table_caption = esc(p["mainResultsTable"]["caption"])
+    ablation_caption = esc(p["ablationTable"]["caption"])
 
     nav = """
+      <a href="#teaser">Overview</a>
       <a href="#framework">Framework</a>
-      <a href="#attacks">Attack Types</a>
       <a href="#results">Results</a>
       <a href="#bibtex">BibTeX</a>"""
 
@@ -304,21 +390,21 @@ def render_cognidir_paper_page(p: dict) -> str:
         <p class="lead-text">{esc(p["tldr"])}</p>
       </section>
 
+      <section class="paper-section" id="teaser">
+        <h2>Cognitive Attacks Break Static Defenses</h2>
+        <p class="section-text">LLM-generated malicious comments exploit distinct cognitive mechanisms. Traditional detectors suffer &gt;18% F1 drops under heterogeneous attacks, while CogniDir narrows the gap and maintains F1 above 0.94 across attack categories.</p>
+        {fig(p, "teaser", "Group-wise F1 comparison under cognitive malicious comments", "<strong>Figure 1.</strong> Group-wise F1 on Weibo16: prior methods drop sharply under diverse malicious comments; CogniDir maintains high robust F1.", "figure-teaser")}
+      </section>
+
       <section class="paper-section" id="framework">
         <h2>Framework</h2>
         <p class="section-text">{esc(p["methodOverview"])}</p>
-        {fig(p, "framework", "CogniDir framework overview", "<strong>Framework overview.</strong> Cognitive malicious comment synthesis, InfoDirichlet Resampling (IDR), and robust evaluation under mixed attack settings.", "figure-full")}
+        {fig(p, "framework", "CogniDir framework overview", "<strong>Figure 2.</strong> Cognitive malicious comment synthesis, InfoDirichlet Resampling (IDR), and robust evaluation under mixed attack settings.", "figure-full")}
       </section>
 
       <section class="paper-section" id="contributions">
         <h2>Key Contributions</h2>
         <ul class="section-list">{contributions}</ul>
-      </section>
-
-      <section class="paper-section" id="introduction">
-        <h2>Cognitive Attacks Break Static Defenses</h2>
-        <p class="section-text">LLM-generated malicious comments exploit distinct cognitive mechanisms. Traditional detectors suffer &gt;18% F1 drops under heterogeneous attacks, while CogniDir narrows the gap and maintains F1 above 0.94 across attack categories.</p>
-        {fig(p, "teaser", "Group-wise F1 comparison under cognitive malicious comments", "<strong>Figure 1.</strong> Group-wise F1 on Weibo16: prior methods drop sharply under diverse malicious comments; CogniDir maintains high robust F1.", "figure-teaser")}
       </section>
 
       <section class="paper-section" id="attacks">
@@ -331,21 +417,24 @@ def render_cognidir_paper_page(p: dict) -> str:
         <h2>Main Results</h2>
         <ul class="section-list">{main_results}</ul>
 
-        <h3 class="subsection-title">Robust F1 Across Benchmarks</h3>
-        <p class="section-text">O = original detection, A = under attack, R = after robust training (all F1). Δ Improve is relative gain over the second-best baseline.</p>
-        <div class="table-wrap full-width-table">
-          <table class="data-table compact">
-            <thead><tr><th>Dataset</th><th>O</th><th>A</th><th>R</th><th>Δ Improve</th></tr></thead>
-            <tbody>{result_rows}</tbody>
-          </table>
-        </div>
+        <h3 class="subsection-title">Performance vs. Baselines</h3>
+        <p class="section-text">{main_table_caption}</p>
+        {result_rows}
 
         <h3 class="subsection-title">Attack Success Rate (ASR)</h3>
         <p class="section-text">Without adversarial training, attack success rates remain high across comment counts and attack types. CogniDir reduces mean ASR by 45% after adaptive training.</p>
-        <div class="layer-grid">
-          {fig(p, "asrBefore", "ASR before robust training", "<strong>Before training.</strong> High ASR under fact distortion, logical confusion, and emotional manipulation.", "figure-compact-inline")}
-          {fig(p, "asrAfter", "ASR after CogniDir training", "<strong>After CogniDir.</strong> ASR drops substantially across attack types and comment counts.", "figure-compact-inline")}
+        <div class="asr-grid">
+          {fig(p, "asrBefore", "ASR before robust training", "<strong>Figure 3a.</strong> ASR before robust training under varying attack types and comment counts.", "figure-asr")}
+          {fig(p, "asrAfter", "ASR after CogniDir training", "<strong>Figure 3b.</strong> ASR after robust training — substantial reduction across attack types.", "figure-asr")}
         </div>
+
+        <h3 class="subsection-title">Adaptive Robustness During Training</h3>
+        <p class="section-text">Validation accuracy rises for all attack groups and the inter-group gap shrinks from 0.23 to 0.08, showing IDR reallocates learning toward weaker mechanisms.</p>
+        {fig(p, "convergence", "Validation accuracy convergence across attack groups", "<strong>Figure 4.</strong> Group-wise validation accuracy during training — Fact Distortion, Logical Confusion, and Emotional Manipulation.", "figure-large")}
+
+        <h3 class="subsection-title">Ablation Study</h3>
+        <p class="section-text">{ablation_caption}</p>
+        {ablation_table}
       </section>
 
       <section class="paper-section" id="method">

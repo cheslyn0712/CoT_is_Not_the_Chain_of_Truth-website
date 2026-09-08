@@ -352,6 +352,33 @@ a.venue-badge:hover {
   max-width: 100%;
 }
 
+.asr-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.figure-asr img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.results-matrix th,
+.results-matrix td {
+  white-space: nowrap;
+}
+
+.table-highlight-row td {
+  background: rgba(78, 166, 238, 0.08);
+}
+
 .figure-medium img {
   max-width: min(820px, 100%);
   margin: 0 auto;
@@ -597,6 +624,7 @@ a.venue-badge:hover {
 @media (max-width: 900px) {
   .taxonomy-grid,
   .layer-grid,
+  .asr-grid,
   .metrics-grid,
   .paper-hero-stats,
   .distribution-grid {

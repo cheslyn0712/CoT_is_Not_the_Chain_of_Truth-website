@@ -111,8 +111,8 @@
   <div class="site-shell">
     <header class="site-header site-header-nav-only">
       <nav class="site-nav">
+      <a href="#teaser">Overview</a>
       <a href="#framework">Framework</a>
-      <a href="#attacks">Attack Types</a>
       <a href="#results">Results</a>
       <a href="#bibtex">BibTeX</a>
         <a href="https://arxiv.org/pdf/2510.09712" target="_blank" rel="noopener noreferrer">PDF</a>
@@ -135,27 +135,27 @@
         <p class="lead-text">LLM-generated cognitive malicious comments exploit fact distortion, logical confusion, and emotional manipulation to break comment-aware fake news detectors. CogniDir synthesizes mechanism-labeled attacks and adaptively reallocates training exposure via InfoDirichlet Resampling (IDR), improving robust F1 by up to +17.9% on three cross-lingual benchmarks.</p>
       </section>
 
-      <section class="paper-section" id="framework">
-        <h2>Framework</h2>
-        <p class="section-text">CogniDir operates in three stages: (1) cognitive-grounded malicious comment synthesis with multiple LLMs across fact distortion, logical confusion, and emotional manipulation; (2) InfoDirichlet Resampling (IDR) that maps group-wise vulnerability scores to adaptive training proportions after each epoch; (3) robust evaluation under mixed adversarial comment settings on Weibo16, Weibo20, and RumourEval-19.</p>
-        <figure class="paper-figure figure-full">
-  <img src="../../data/figures/cognidir_framework.png" alt="CogniDir framework overview" loading="lazy">
-  <figcaption><strong>Framework overview.</strong> Cognitive malicious comment synthesis, InfoDirichlet Resampling (IDR), and robust evaluation under mixed attack settings.</figcaption>
-</figure>
-      </section>
-
-      <section class="paper-section" id="contributions">
-        <h2>Key Contributions</h2>
-        <ul class="section-list"><li>We introduce a cognitive-grounded adversarial synthesis pipeline that generates mechanism-labeled malicious comments, improving training diversity and fidelity.</li><li>We propose CogniDir, a distributional optimization framework where an information-theoretic vulnerability metric adaptively maps group-wise brittleness to feedback-driven sampling allocation.</li><li>We demonstrate state-of-the-art robustness across three cross-lingual benchmarks, narrowing the vulnerability gap under heterogeneous attacks while maintaining high baseline accuracy.</li></ul>
-      </section>
-
-      <section class="paper-section" id="introduction">
+      <section class="paper-section" id="teaser">
         <h2>Cognitive Attacks Break Static Defenses</h2>
         <p class="section-text">LLM-generated malicious comments exploit distinct cognitive mechanisms. Traditional detectors suffer &gt;18% F1 drops under heterogeneous attacks, while CogniDir narrows the gap and maintains F1 above 0.94 across attack categories.</p>
         <figure class="paper-figure figure-teaser">
   <img src="../../data/figures/cognidir_teaser.png" alt="Group-wise F1 comparison under cognitive malicious comments" loading="lazy">
   <figcaption><strong>Figure 1.</strong> Group-wise F1 on Weibo16: prior methods drop sharply under diverse malicious comments; CogniDir maintains high robust F1.</figcaption>
 </figure>
+      </section>
+
+      <section class="paper-section" id="framework">
+        <h2>Framework</h2>
+        <p class="section-text">CogniDir operates in three stages: (1) cognitive-grounded malicious comment synthesis with multiple LLMs across fact distortion, logical confusion, and emotional manipulation; (2) InfoDirichlet Resampling (IDR) that maps group-wise vulnerability scores to adaptive training proportions after each epoch; (3) robust evaluation under mixed adversarial comment settings on Weibo16, Weibo20, and RumourEval-19.</p>
+        <figure class="paper-figure figure-full">
+  <img src="../../data/figures/cognidir_framework.png" alt="CogniDir framework overview" loading="lazy">
+  <figcaption><strong>Figure 2.</strong> Cognitive malicious comment synthesis, InfoDirichlet Resampling (IDR), and robust evaluation under mixed attack settings.</figcaption>
+</figure>
+      </section>
+
+      <section class="paper-section" id="contributions">
+        <h2>Key Contributions</h2>
+        <ul class="section-list"><li>We introduce a cognitive-grounded adversarial synthesis pipeline that generates mechanism-labeled malicious comments, improving training diversity and fidelity.</li><li>We propose CogniDir, a distributional optimization framework where an information-theoretic vulnerability metric adaptively maps group-wise brittleness to feedback-driven sampling allocation.</li><li>We demonstrate state-of-the-art robustness across three cross-lingual benchmarks, narrowing the vulnerability gap under heterogeneous attacks while maintaining high baseline accuracy.</li></ul>
       </section>
 
       <section class="paper-section" id="attacks">
@@ -180,27 +180,61 @@
         <h2>Main Results</h2>
         <ul class="section-list"><li>Traditional detectors drop over 18% F1 under diverse cognitive malicious comments; CogniDir maintains F1 above 0.94 across attack categories on Weibo16.</li><li>Relative to the second-best baseline, CogniDir improves robust F1 by +9.0% (Weibo16), +17.9% (Weibo20), and +14.5% (RumourEval-19).</li><li>Under mixed attack settings, CogniDir outperforms the strongest baselines by 8.9–21.1% and reduces mean attack success rate (ASR) by 45% after adaptive training.</li><li>Ablation confirms that malicious comment generation, vulnerability scoring, and Dirichlet allocation are complementary—removing any component causes 11–21 point macro-F1 drops.</li></ul>
 
-        <h3 class="subsection-title">Robust F1 Across Benchmarks</h3>
-        <p class="section-text">O = original detection, A = under attack, R = after robust training (all F1). Δ Improve is relative gain over the second-best baseline.</p>
-        <div class="table-wrap full-width-table">
-          <table class="data-table compact">
-            <thead><tr><th>Dataset</th><th>O</th><th>A</th><th>R</th><th>Δ Improve</th></tr></thead>
-            <tbody><tr><td><strong>Weibo16</strong></td><td>0.955</td><td>0.792</td><td>0.945</td><td>+9.0%</td></tr><tr><td><strong>Weibo20</strong></td><td>0.936</td><td>0.728</td><td>0.947</td><td>+17.9%</td></tr><tr><td><strong>RumourEval-19</strong></td><td>0.822</td><td>0.552</td><td>0.812</td><td>+14.5%</td></tr></tbody>
-          </table>
-        </div>
+        <h3 class="subsection-title">Performance vs. Baselines</h3>
+        <p class="section-text">Performance comparison between CogniDir and baselines. O = original detection, A = under attack, R = after robust training (all F1). Δ Improve is relative gain over the second-best baseline.</p>
+        <div class="table-wrap full-width-table scroll-x">
+  <table class="data-table compact results-matrix">
+    <thead>
+      <tr>
+        <th>Type</th><th>Model</th>
+        <th colspan="3">Weibo16</th>
+        <th colspan="3">Weibo20</th>
+        <th colspan="3">RumourEval-19</th>
+      </tr>
+      <tr>
+        <th colspan="2"></th>
+        <th>O</th><th>A</th><th>R</th>
+        <th>O</th><th>A</th><th>R</th>
+        <th>O</th><th>A</th><th>R</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td rowspan="4"><strong>LLM-Only</strong></td><td>Gemma-2-2B</td><td>0.322</td><td>0.291</td><td>0.274</td><td>0.345</td><td>0.292</td><td>0.326</td><td>0.294</td><td>0.238</td><td>0.275</td></tr><tr><td>Mistral-7B</td><td>0.686</td><td>0.334</td><td>0.495</td><td>0.654</td><td>0.315</td><td>0.375</td><td>0.468</td><td>0.184</td><td>0.252</td></tr><tr><td>Llama-3-8B</td><td>0.598</td><td>0.324</td><td>0.408</td><td>0.582</td><td>0.363</td><td>0.408</td><td>0.377</td><td>0.219</td><td>0.276</td></tr><tr><td>Qwen2.5-32B</td><td>0.831</td><td>0.282</td><td>0.716</td><td>0.823</td><td>0.367</td><td>0.541</td><td>0.553</td><td>0.343</td><td>0.412</td></tr><tr><td rowspan="6"><strong>Deep-Learning Based</strong></td><td>dEFEND</td><td>0.902</td><td>0.727</td><td>0.745</td><td>0.884</td><td>0.557</td><td>0.585</td><td>0.648</td><td>0.407</td><td>0.687</td></tr><tr><td>Dual-CAN</td><td>0.895</td><td>0.366</td><td>0.578</td><td>0.872</td><td>0.436</td><td>0.580</td><td>0.628</td><td>0.377</td><td>0.546</td></tr><tr><td>GenFEND</td><td>0.915</td><td>0.578</td><td>0.867</td><td>0.892</td><td>0.640</td><td>0.761</td><td>0.662</td><td>0.456</td><td>0.606</td></tr><tr><td>L-Defense</td><td>0.882</td><td>0.706</td><td>0.759</td><td>0.860</td><td>0.666</td><td>0.702</td><td>0.610</td><td>0.343</td><td>0.709</td></tr><tr><td>ARG</td><td>0.884</td><td>0.619</td><td>0.820</td><td>0.812</td><td>0.576</td><td>0.803</td><td>0.712</td><td>0.440</td><td>0.609</td></tr><tr><td><strong>CogniDir</strong></td><td><strong>0.955</strong></td><td><strong>0.792</strong></td><td><strong>0.945</strong></td><td><strong>0.936</strong></td><td><strong>0.728</strong></td><td><strong>0.947</strong></td><td><strong>0.822</strong></td><td><strong>0.552</strong></td><td><strong>0.812</strong></td></tr>
+      <tr class="table-highlight-row"><td colspan="2"><strong>Δ Improve</strong></td><td><strong>+4.4%</strong></td><td><strong>+8.9%</strong></td><td><strong>+9.0%</strong></td><td><strong>+4.9%</strong></td><td><strong>+9.3%</strong></td><td><strong>+17.9%</strong></td><td><strong>+15.5%</strong></td><td><strong>+21.1%</strong></td><td><strong>+14.5%</strong></td></tr>
+    </tbody>
+  </table>
+</div>
 
         <h3 class="subsection-title">Attack Success Rate (ASR)</h3>
         <p class="section-text">Without adversarial training, attack success rates remain high across comment counts and attack types. CogniDir reduces mean ASR by 45% after adaptive training.</p>
-        <div class="layer-grid">
-          <figure class="paper-figure figure-compact-inline">
+        <div class="asr-grid">
+          <figure class="paper-figure figure-asr">
   <img src="../../data/figures/cognidir_asr_before.png" alt="ASR before robust training" loading="lazy">
-  <figcaption><strong>Before training.</strong> High ASR under fact distortion, logical confusion, and emotional manipulation.</figcaption>
+  <figcaption><strong>Figure 3a.</strong> ASR before robust training under varying attack types and comment counts.</figcaption>
 </figure>
-          <figure class="paper-figure figure-compact-inline">
+          <figure class="paper-figure figure-asr">
   <img src="../../data/figures/cognidir_asr_after.png" alt="ASR after CogniDir training" loading="lazy">
-  <figcaption><strong>After CogniDir.</strong> ASR drops substantially across attack types and comment counts.</figcaption>
+  <figcaption><strong>Figure 3b.</strong> ASR after robust training — substantial reduction across attack types.</figcaption>
 </figure>
         </div>
+
+        <h3 class="subsection-title">Adaptive Robustness During Training</h3>
+        <p class="section-text">Validation accuracy rises for all attack groups and the inter-group gap shrinks from 0.23 to 0.08, showing IDR reallocates learning toward weaker mechanisms.</p>
+        <figure class="paper-figure figure-large">
+  <img src="../../data/figures/cognidir_convergence.png" alt="Validation accuracy convergence across attack groups" loading="lazy">
+  <figcaption><strong>Figure 4.</strong> Group-wise validation accuracy during training — Fact Distortion, Logical Confusion, and Emotional Manipulation.</figcaption>
+</figure>
+
+        <h3 class="subsection-title">Ablation Study</h3>
+        <p class="section-text">Ablation of malicious comment generation (G), vulnerability score (VS), and Dirichlet expectation allocation (DEA).</p>
+        <div class="table-wrap full-width-table scroll-x">
+  <table class="data-table compact">
+    <thead>
+      <tr><th>Dataset</th><th>Method</th><th>Macro-F1</th><th>Acc.</th><th>F1-real</th><th>F1-fake</th></tr>
+    </thead>
+    <tbody><tr><td rowspan="4"><strong>Weibo16</strong></td><td>CogniDir-G</td><td>0.792</td><td>0.811</td><td>0.830</td><td>0.754</td></tr><tr><td>CogniDir-VS</td><td>0.821</td><td>0.836</td><td>0.862</td><td>0.780</td></tr><tr><td>CogniDir-DEA</td><td>0.855</td><td>0.872</td><td>0.895</td><td>0.815</td></tr><tr><td><strong>CogniDir</strong></td><td><strong>0.945</strong></td><td><strong>0.947</strong></td><td><strong>0.957</strong></td><td><strong>0.933</strong></td></tr><tr><td rowspan="4"><strong>Weibo20</strong></td><td>CogniDir-G</td><td>0.728</td><td>0.742</td><td>0.770</td><td>0.686</td></tr><tr><td>CogniDir-VS</td><td>0.792</td><td>0.807</td><td>0.825</td><td>0.759</td></tr><tr><td>CogniDir-DEA</td><td>0.834</td><td>0.848</td><td>0.872</td><td>0.796</td></tr><tr><td><strong>CogniDir</strong></td><td><strong>0.947</strong></td><td><strong>0.947</strong></td><td><strong>0.951</strong></td><td><strong>0.943</strong></td></tr><tr><td rowspan="4"><strong>RumourEval-19</strong></td><td>CogniDir-G</td><td>0.552</td><td>0.574</td><td>0.620</td><td>0.484</td></tr><tr><td>CogniDir-VS</td><td>0.613</td><td>0.628</td><td>0.662</td><td>0.564</td></tr><tr><td>CogniDir-DEA</td><td>0.692</td><td>0.707</td><td>0.748</td><td>0.636</td></tr><tr><td><strong>CogniDir</strong></td><td><strong>0.812</strong></td><td><strong>0.836</strong></td><td><strong>0.883</strong></td><td><strong>0.741</strong></td></tr></tbody>
+  </table>
+</div>
       </section>
 
       <section class="paper-section" id="method">
