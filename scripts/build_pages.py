@@ -206,17 +206,22 @@ def figure_src(p: dict, filename: str) -> str:
     return f"{base}/{filename}"
 
 
+def figure_pdf_link(p: dict, png_filename: str) -> str:
+    pdf_name = Path(png_filename).stem + ".pdf"
+    if p.get("figureDir"):
+        return f'{p["_assetRoot"]}/data/figures/{p["figureDir"]}/{pdf_name}'
+    return f'{p["_assetRoot"]}/data/figures/{pdf_name}'
+
+
 def fig(p: dict, key: str, alt: str, caption: str, css_class: str = "figure-medium") -> str:
     filename = p["figures"][key]
     src = figure_src(p, filename)
-    cap = f"<figcaption>{caption} · <a href=\"{esc(src)}\" target=\"_blank\" rel=\"noopener\">Original file</a></figcaption>" if caption else ""
-    if filename.lower().endswith(".pdf"):
-        return f"""<figure class="paper-figure {css_class} figure-pdf">
-  <object data="{esc(src)}" type="application/pdf" aria-label="{esc(alt)}">
-    <p class="figure-fallback"><a href="{esc(src)}" target="_blank" rel="noopener noreferrer">Open {esc(alt)} (PDF)</a></p>
-  </object>
-  {cap}
-</figure>"""
+    pdf_href = figure_pdf_link(p, filename)
+    cap = (
+        f"<figcaption>{caption} · <a href=\"{esc(pdf_href)}\" target=\"_blank\" rel=\"noopener\">Vector PDF</a></figcaption>"
+        if caption
+        else ""
+    )
     return f"""<figure class="paper-figure {css_class}">
   <img src="{esc(src)}" alt="{esc(alt)}" loading="lazy">
   {cap}
@@ -229,13 +234,6 @@ def fig_file(p: dict, filename: str, alt: str, caption: str, css_class: str = "f
     else:
         src = f'{p["_assetRoot"]}/data/figures/{filename}'
     cap = f"<figcaption>{caption}</figcaption>" if caption else ""
-    if filename.lower().endswith(".pdf"):
-        return f"""<figure class="paper-figure {css_class} figure-pdf">
-  <object data="{esc(src)}" type="application/pdf" aria-label="{esc(alt)}">
-    <p class="figure-fallback"><a href="{esc(src)}" target="_blank" rel="noopener noreferrer">Open {esc(alt)} (PDF)</a></p>
-  </object>
-  {cap}
-</figure>"""
     return f"""<figure class="paper-figure {css_class}">
   <img src="{esc(src)}" alt="{esc(alt)}" loading="lazy">
   {cap}
