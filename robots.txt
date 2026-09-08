@@ -4,4 +4,4 @@ Allow: /
 User-agent: OAI-SearchBot
 Allow: /
 
-Sitemap: https://cheslyn0712.github.io/CoT_is_Not_the_Chain_of_Truth-website/sitemap.xml
+Sitemap: https://cheslyn0712.github.io/sitemap.xml

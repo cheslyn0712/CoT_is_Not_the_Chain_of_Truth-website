@@ -2,7 +2,7 @@
   "slug": "cognidir",
   "published": true,
   "template": "cognidir",
-  "siteBase": "https://cheslyn0712.github.io/CoT_is_Not_the_Chain_of_Truth-website",
+  "siteBase": "https://cheslyn0712.github.io",
   "title": "CogniDir: Combating Cognitive Malicious Comments via Adaptive Distributional Learning for Robust Fake News Detection",
   "shortTitle": "CogniDir",
   "venue": "EMNLP 2026",

@@ -1,7 +1,7 @@
 {
   "slug": "cot-chain-of-truth",
   "published": true,
-  "siteBase": "https://cheslyn0712.github.io/CoT_is_Not_the_Chain_of_Truth-website",
+  "siteBase": "https://cheslyn0712.github.io",
   "title": "CoT is Not the Chain of Truth: An Empirical Internal Analysis of Reasoning LLMs for Fake News Generation",
   "shortTitle": "CoT is Not the Chain of Truth",
   "venue": "ICML 2026",
